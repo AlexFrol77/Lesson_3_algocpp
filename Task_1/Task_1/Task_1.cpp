@@ -2,72 +2,46 @@
 #include <vector>
 #include <Windows.h>
 
-void merge(std::vector <int> vecTarget, std::vector <int> vecLeft, std::vector <int> vecRight) {
-	int minVecLeftIndex = 0;
-	int minVecRightIndex = 0;
-	int minVecTargetIndex = 0;
-
-	while ((minVecLeftIndex < vecLeft.size() - 1) || (minVecRightIndex < vecRight.size() - 1))
-		if (vecLeft[minVecLeftIndex] <= vecRight[minVecRightIndex]) {
-			vecTarget[minVecTargetIndex] = vecLeft[minVecLeftIndex];
-			minVecLeftIndex++;
-			minVecTargetIndex++;
-		}
-		if (vecLeft[minVecLeftIndex] >= vecRight[minVecRightIndex]) {
-			vecTarget[minVecTargetIndex] = vecLeft[minVecRightIndex];
-			minVecRightIndex++;
-			minVecTargetIndex++;
-		}
-	while ((minVecLeftIndex == vecLeft.size() - 1) && (minVecRightIndex < vecRight.size() - 1)) {
-		vecTarget[minVecTargetIndex] = vecRight[minVecRightIndex];
-		minVecRightIndex++;
-		minVecTargetIndex++;
-	}
-	while ((minVecRightIndex == vecRight.size() - 1) && (minVecLeftIndex < vecLeft.size() - 1)) {
-		vecTarget[minVecTargetIndex] = vecLeft[minVecLeftIndex];
-		minVecLeftIndex++;
-		minVecTargetIndex++;
+void merge(std::vector <int> vec, int left, int right) {
+	std::vector <int> merge;
+	if (vec[left] > vec[right]) {
+		int temp = vec[left];
+		vec[left] = vec[right];
+		vec[left] = vec[right];
 	}
 }
 
-void sortMerge(std::vector <int> vecNoSorting) {
-	
-	if (vecNoSorting.size() < 2) {
+void sort_merge(std::vector <int> vec, int left, int right) {
+	if ((right - left) < 2) {
 		return;
 	}
-	int middle = (vecNoSorting.size() / 2);
-	std::vector <int> vecLeft;
-	std::vector <int> vecRight;
-	for (int i = 0; i < middle - 1; i++) {
-		vecLeft.push_back(vecNoSorting[i]);
-	}
-	for (int i = middle; i < vecNoSorting.size() - 1; i++) {
-		vecRight.push_back(vecNoSorting[i]);
-	}
-	sortMerge(vecLeft);
-	sortMerge(vecRight);
-	for (int i : vecLeft) {
-		std::cout << i << " ";
-	}
-	std::cout << std::endl;
-	for (int i : vecRight) {
-		std::cout << i << " " << std::endl;
-	}
-	std::cout << std::endl;
-	//merge(vecNoSorting, vecLeft, vecRight);
+	int middle = (right - left) / 2;
+	int l_st = left,
+		l_fin = middle;
+	sort_merge(vec, l_st, l_fin);
+	sort_merge(vec, l_fin - 1, right);
+	merge(vec, l_st, l_fin);
+	
 }
 
-
 int main(int argc, char** argv) {
+	
+	std::vector <int> vec = { 88, 91, 87, 59, 53, 49, 29, 16, 4, 27, 28, 89, 2, 25, 74 };
+	int size = vec.size();
+	int left = 0;
+	int right = size - 1;
 
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
-
-	std::vector <int> vecNoSorting = {88, 91, 87, 59, 53, 49, 29, 16, 4, 27, 28, 89, 2, 25, 74};
-
-	sortMerge(vecNoSorting);
-	/*for (int i : vecNoSorting) {
-		std::cout << i << " ";
+	/*for (int i = 0; i != vec.size(); i++) {
+		std::cout << vec[i] << " ";
 	}*/
+	//std::cout << std::endl;
+
+	sort_merge(vec, left, right);
+
+	/*for (int i = 0; i != vec.size(); i++) {
+		std::cout << vec[i] << " ";
+	}
+	std::cout << std::endl;*/
+	
 	return 0;
 }
